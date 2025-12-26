@@ -11,6 +11,7 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/transaksi', [App\Http\Controllers\TransaksiController::class, 'index']);
 Route::post('/transaksi', [App\Http\Controllers\TransaksiController::class, 'store']);
+Route::get('/transaksi/{id}', [App\Http\Controllers\TransaksiController::class, 'show']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PelangganResource;
 use App\Models\Pelanggan;
 use Illuminate\Http\Request;
 
@@ -14,10 +15,7 @@ class PelangganController extends Controller
     {
         try {
             $pelanggan = Pelanggan::all();
-            return response()->json([
-                'message' => 'Data pelanggan berhasil ditampilkan',
-                'data' => $pelanggan
-            ]);
+            return PelangganResource::collection($pelanggan);
         } catch (\Exception $th) {
             return response()->json([
                 'message' => 'Gagal menampilkan data pelanggan',
@@ -46,10 +44,7 @@ class PelangganController extends Controller
                 'no_telepon' => 'required|string',
             ]);
             $pelanggan = Pelanggan::create($data);
-            return response()->json([
-                'message' => 'Data pelanggan berhasil ditambahkan',
-                'data' => $pelanggan
-            ]);
+            return PelangganResource::collection($pelanggan);
         } catch (\Exception $th) {
             return response()->json([
                 'message' => 'Gagal menyimpan data pelanggan',

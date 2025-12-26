@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\DetailTransaksiResource;
 use App\Http\Resources\TransaksiResource;
 use App\Models\Barang;
 use App\Models\Transaksi;
@@ -63,9 +64,17 @@ class TransaksiController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Transaksi $transaksi)
+    public function show($id)
     {
-        //
+        try {
+            $transaksi = Transaksi::with('pelanggan:id,nama_pelanggan', 'barang:id,nama_barang')->find($id);
+            return new DetailTransaksiResource($transaksi);
+        } catch (\Exception $th) {
+            return response()->json([
+                'message' => 'Gagal menampilkan data transaksi',
+                'error' => $th->getMessage()
+            ]);
+        }
     }
 
     /**
