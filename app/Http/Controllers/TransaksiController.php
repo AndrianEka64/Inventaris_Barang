@@ -45,10 +45,17 @@ class TransaksiController extends Controller
                 'barang_id' => 'required|exists:barangs,id',
                 'qty' => 'required|integer|min:1',
             ]);
-            $barang = Barang::find($data['barang_id']);
+            $barang = Barang::findOrFail($data['barang_id']);
+            if ($data['qty']>$barang->stok) {
+                return response()->json([
+                    'message' => 'Stok barang tidak mencukupi',
+                    'banyak stok' => $barang->stok
+                ]);
+            }
             $data['harga'] = $barang->harga;
             $data['total'] = $data['qty'] * $data['harga'];
             $transaksi = Transaksi::create($data);
+            $barang->decrement('stok', $data['qty']);
             return response()->json([
                 'message' => 'Transaksi berhasil disimpan',
                 'data' => $transaksi
@@ -67,7 +74,7 @@ class TransaksiController extends Controller
     public function show($id)
     {
         try {
-            $transaksi = Transaksi::with('pelanggan:id,nama_pelanggan', 'barang:id,nama_barang')->find($id);
+            $transaksi = Transaksi::with('pelanggan:id,nama_pelanggan,alamat', 'barang:id,nama_barang')->find($id);
             return new DetailTransaksiResource($transaksi);
         } catch (\Exception $th) {
             return response()->json([

@@ -21,6 +21,7 @@ class DetailTransaksiResource extends JsonResource
             'harga_satuan' => $this->harga,
             'jumlah' => $this->qty,
             'total_harga' => $this->total,
+            'tanggal' => $this->created_at->format('Y-m-d'),
         ];
     }
 }
