@@ -103,8 +103,11 @@ class TransaksiController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Transaksi $transaksi)
+    public function destroy($id)
     {
-        //
+        Transaksi::find($id)->delete();
+        return response()->json([
+            'message'=>'data transaksi berhasil dihapus',
+        ]);
     }
 }

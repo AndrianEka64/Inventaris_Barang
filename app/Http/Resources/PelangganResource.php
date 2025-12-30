@@ -18,7 +18,6 @@ class PelangganResource extends JsonResource
             'id' => $this->id,
             'nama_pelanggan' => $this->nama_pelanggan,
             'alamat' => $this->alamat,
-            'no_telepon' => $this->no_telepon,
         ];
     }
 }

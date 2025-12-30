@@ -41,10 +41,13 @@ class PelangganController extends Controller
             $data = $request->validate([
                 'nama_pelanggan' => 'required|string',
                 'alamat' => 'required|string',
-                'no_telepon' => 'required|string',
+                'no_telepon' => 'required',
             ]);
             $pelanggan = Pelanggan::create($data);
-            return PelangganResource::collection($pelanggan);
+            return response()->json([
+                'message'=>'data pelanggan berasil ditambahkan',
+                'data'=>$pelanggan
+            ]);
         } catch (\Exception $th) {
             return response()->json([
                 'message' => 'Gagal menyimpan data pelanggan',
