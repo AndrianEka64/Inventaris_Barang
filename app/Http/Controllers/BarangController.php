@@ -152,6 +152,7 @@ class BarangController extends Controller
             $barang->delete();
             return response()->json([
                 'message' => 'Data barang berhasil dihapus',
+                'data yang dihapus' => $barang
             ]);
         } catch (\Exception $th) {
             return response()->json([

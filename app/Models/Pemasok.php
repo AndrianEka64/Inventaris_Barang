@@ -14,11 +14,11 @@ class Pemasok extends Model
 
     public function barang()
     {
-        return $this->hasMany(Barang::class);
+        return $this->hasMany(Barang::class, 'barang_id');
     }
 
     public function barangMasuk()
     {
-        return $this->hasMany(BarangMasuk::class);
+        return $this->hasMany(BarangMasuk::class,'pemasok_id');
     }
 }

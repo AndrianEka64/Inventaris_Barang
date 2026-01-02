@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BMResource;
+use App\Http\Resources\DetailBMResource;
+use App\Models\Barang;
 use App\Models\BarangMasuk;
 use Illuminate\Http\Request;
 
@@ -12,7 +15,8 @@ class BarangMasukController extends Controller
      */
     public function index()
     {
-        //
+        $barangmasuk = BarangMasuk::all();
+        return BMResource::collection($barangmasuk);
     }
 
     /**
@@ -28,15 +32,29 @@ class BarangMasukController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validasi = $request->validate([
+            'pemasok_id' => 'required|exists:pemasoks,id',
+            'barang_id' => 'required|exists:barangs,id',
+            'qty' => 'required',
+            'tanggal_masuk' => 'required',
+        ]);
+        $barang = Barang::findOrFail($validasi['barang_id']);
+        $validasi['harga'] = $barang->harga;
+        $validasi['harga_beli'] = $validasi['qty'] * $validasi['harga'];
+        $barangmasuk = BarangMasuk::create($validasi);
+        return response()->json([
+            'message' => 'data barang masuk berhasil ditambah',
+            'data' => $barangmasuk
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(BarangMasuk $barangMasuk)
+    public function show($id)
     {
-        //
+        $barangmasuk = BarangMasuk::with('pemasok:id,nama_pemasok,alamat,no_telepon', 'barang:id,nama_barang,deskripsi')->find($id);
+        return new DetailBMResource($barangmasuk);
     }
 
     /**
@@ -50,16 +68,33 @@ class BarangMasukController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, BarangMasuk $barangMasuk)
+    public function update(Request $request, $id)
     {
-        //
+        $validasi = $request->validate([
+            'pemasok_id' => 'required',
+            'barang_id' => 'required',
+            'qty' => 'required',
+            'tanggal_masuk' => 'required',
+        ]);
+        $barangmasuk = BarangMasuk::find($id);
+        $barang = Barang::findOrFail($validasi['barang_id']);
+        $validasi['harga'] = $barang->harga;
+        $validasi['harga_beli'] = $validasi['qty'] * $validasi['harga'];
+        $barangmasuk->update($validasi);
+        return response()->json([
+            'message'=>'data berhasil diubah',
+            'data'=>$barangmasuk
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(BarangMasuk $barangMasuk)
+    public function destroy($id)
     {
-        //
+        $barangmasuk = BarangMasuk::find($id)->delete();
+        return response()->json([
+            'message'=>'data berhasil dihapus',
+        ]);
     }
 }

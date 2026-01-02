@@ -25,6 +25,6 @@ class Transaksi extends Model
     }
     public function barangKeluar()
     {
-        return $this->hasMany(BarangKeluar::class);
+        return $this->hasMany(BarangKeluar::class,'transaksi_id');
     }
 }

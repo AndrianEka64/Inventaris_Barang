@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BKResource;
+use App\Http\Resources\DetailBKResource;
 use App\Models\BarangKeluar;
 use Illuminate\Http\Request;
 
@@ -12,7 +14,8 @@ class BarangKeluarController extends Controller
      */
     public function index()
     {
-        //
+        $barangkeluar = BarangKeluar::all();
+        return BKResource::collection($barangkeluar);
     }
 
     /**
@@ -28,15 +31,28 @@ class BarangKeluarController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validasi = $request->validate([
+            'transaksi_id' => 'required|exists:transaksis,id',
+            'barang_id'=>'required|exists:barangs,id',
+            'qty'=>'required',
+            'tanggal_keluar' => 'required',
+            'keterangan'=>'required',
+        ]);
+        $barangkeluar = BarangKeluar::create($validasi);
+        return response()->json([
+            'message'=>'data barang keluar berhasil ditambah',
+            'data'=>$barangkeluar
+        ]);
+
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(BarangKeluar $barangKeluar)
+    public function show($id)
     {
-        //
+        $barangkeluar = BarangKeluar::with('transaksi:id,pelanggan_id,barang_id,qty,harga,total','barang:id,nama_barang,deskripsi')->find($id);
+        return new DetailBKResource($barangkeluar);
     }
 
     /**
@@ -50,16 +66,31 @@ class BarangKeluarController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, BarangKeluar $barangKeluar)
+    public function update(Request $request, $id)
     {
-        //
+         $validasi = $request->validate([
+            'transaksi_id' => 'required',
+            'barang_id'=>'required',
+            'qty'=>'required',
+            'tanggal_keluar' => 'required',
+            'keterangan'=>'required',
+        ]);
+        $barangkeluar = BarangKeluar::find($id);
+        $barangkeluar->update($validasi);
+        return response()->json([
+            'message'=>'data berhasi diubah',
+            'data'=>$barangkeluar
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(BarangKeluar $barangKeluar)
+    public function destroy($id)
     {
-        //
+        BarangKeluar::find($id)->delete();
+        return response()->json([
+            'message'=>'data berhasil dihapus'
+        ]);
     }
 }

@@ -46,7 +46,7 @@ class TransaksiController extends Controller
                 'qty' => 'required|integer|min:1',
             ]);
             $barang = Barang::findOrFail($data['barang_id']);
-            if ($data['qty']>$barang->stok) {
+            if ($data['qty'] > $barang->stok) {
                 return response()->json([
                     'message' => 'Stok barang tidak mencukupi',
                     'banyak stok' => $barang->stok
@@ -95,9 +95,28 @@ class TransaksiController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Transaksi $transaksi)
+    public function update(Request $request, $id)
     {
-        //
+        $data = $request->validate([
+            'pelanggan_id' => 'required|exists:pelanggans,id',
+            'barang_id' => 'required|exists:barangs,id',
+            'qty' => 'required|integer|min:1',
+        ]);
+        $barang = Barang::findOrFail($data['barang_id']);
+        if ($data['qty'] > $barang->stok) {
+            return response()->json([
+                'message' => 'Stok barang tidak mencukupi',
+                'banyak stok' => $barang->stok
+            ]);
+        }
+        $data['harga'] = $barang->harga;
+        $data['total'] = $data['qty'] * $data['harga'];
+        $transaksi = Transaksi::find($id);
+        $transaksi->update($data);
+        return response()->json([
+            'message'=>'data transaksi berhasil diubah',
+            'data'=> $transaksi
+        ]);
     }
 
     /**
@@ -107,7 +126,7 @@ class TransaksiController extends Controller
     {
         Transaksi::find($id)->delete();
         return response()->json([
-            'message'=>'data transaksi berhasil dihapus',
+            'message' => 'data transaksi berhasil dihapus',
         ]);
     }
 }

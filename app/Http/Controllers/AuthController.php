@@ -45,4 +45,11 @@ class AuthController extends Controller
             ]);
         }
     }
+    public function lihat(Request $request)
+    {
+        return response()->json([
+            'message' => 'Anda sudah login',
+            'data' => $request->user(),
+        ]);
+    }
 }

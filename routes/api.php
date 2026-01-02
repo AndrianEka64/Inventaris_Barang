@@ -4,11 +4,14 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\BarangKeluarController;
 use App\Http\Controllers\BarangMasukController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PemasokController;
+use App\Http\Controllers\StokBarangController;
 use App\Http\Controllers\TransaksiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -18,12 +21,14 @@ Route::get('/user', function (Request $request) {
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', [AuthController::class, 'lihat']);
     Route::get('/logout', [AuthController::class, 'logout']);
-
+    //crud
     Route::prefix('transaksi')->group(function () {
         Route::get('/', [TransaksiController::class, 'index']);
         Route::post('/', [TransaksiController::class, 'store']);
         Route::get('/{id}', [TransaksiController::class, 'show']);
+        Route::put('/{id}', [TransaksiController::class, 'update']);
         Route::delete('/{id}', [TransaksiController::class, 'destroy']);
     });
     Route::prefix('barang')->group(function () {
@@ -54,11 +59,25 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/{id}', [BarangMasukController::class, 'update']);
         Route::delete('/{id}', [BarangMasukController::class, 'destroy']);
     });
-    Route::prefix('barangkeluar')->group(function(){
+    Route::prefix('barangkeluar')->group(function () {
         Route::get('/', [BarangKeluarController::class, 'index']);
         Route::post('/', [BarangKeluarController::class, 'store']);
         Route::get('/{id}', [BarangKeluarController::class, 'show']);
         Route::put('/{id}', [BarangKeluarController::class, 'update']);
         Route::delete('/{id}', [BarangKeluarController::class, 'destroy']);
+    });
+    Route::prefix('stokbarang')->group(function () {
+        Route::get('/', [StokBarangController::class, 'index']);
+        Route::post('/', [StokBarangController::class, 'store']);
+        Route::get('/{id}', [StokBarangController::class, 'show']);
+        Route::put('/{id}', [StokBarangController::class, 'update']);
+        Route::delete('/{id}', [StokBarangController::class, 'destroy']);
+    });
+    //total
+    Route::prefix('count')->group(function(){
+        Route::get('/barang',[DashboardController::class,'barang']);
+        Route::get('/pelanggan',[DashboardController::class,'pelanggan']);
+        Route::get('/pemasok',[DashboardController::class,'pemasok']);
+        Route::get('/transaksi',[DashboardController::class,'transaksi']);
     });
 });

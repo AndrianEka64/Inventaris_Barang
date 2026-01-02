@@ -118,7 +118,7 @@ class PelangganController extends Controller
             $pelanggan->delete();
             return response()->json([
                 'message' => 'Data pelanggan berhasil dihapus',
-                'data' => $pelanggan
+                'data yang dihapus' => $pelanggan
             ]);
         } catch (\Exception $th) {
             return response()->json([
