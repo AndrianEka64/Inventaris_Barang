@@ -89,9 +89,11 @@ class StokBarangController extends Controller
      */
     public function destroy($id)
     {
-        StokBarang::find($id)->delete();
+        $stokbarang = StokBarang::find($id);
+        $stokbarang->delete();
         return response()->json([
-            'message' => 'data stok barang berhasil dihapus'
+            'message' => 'data stok barang berhasil dihapus',
+            'data yang dihapus' => $stokbarang
         ]);
     }
 }

@@ -124,9 +124,11 @@ class TransaksiController extends Controller
      */
     public function destroy($id)
     {
-        Transaksi::find($id)->delete();
+        $transaksi = Transaksi::find($id);
+        $transaksi->delete();
         return response()->json([
             'message' => 'data transaksi berhasil dihapus',
+            'data yang dihapus' => $transaksi
         ]);
     }
 }

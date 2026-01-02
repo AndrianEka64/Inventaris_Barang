@@ -94,7 +94,8 @@ class PemasokController extends Controller
      */
     public function destroy($id)
     {
-        $pemasok = Pemasok::find($id)->delete();
+        $pemasok = Pemasok::find($id);
+        $pemasok->delete();
         return response()->json([
             'message'=>'data berhasil dihapus',
             'data'=>$pemasok

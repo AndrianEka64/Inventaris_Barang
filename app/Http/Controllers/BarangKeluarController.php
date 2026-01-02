@@ -88,7 +88,8 @@ class BarangKeluarController extends Controller
      */
     public function destroy($id)
     {
-        BarangKeluar::find($id)->delete();
+        $barangkeluar = BarangKeluar::find($id);
+        $barangkeluar->delete();
         return response()->json([
             'message'=>'data berhasil dihapus'
         ]);

@@ -25,28 +25,28 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout']);
     //crud
     Route::prefix('transaksi')->group(function () {
+        Route::get('/terakhir',[DashboardController::class,'transaksiterakhir']);
         Route::get('/', [TransaksiController::class, 'index']);
         Route::post('/', [TransaksiController::class, 'store']);
         Route::get('/{id}', [TransaksiController::class, 'show']);
         Route::put('/{id}', [TransaksiController::class, 'update']);
         Route::delete('/{id}', [TransaksiController::class, 'destroy']);
-        Route::get('/terakhir',[DashboardController::class,'transaksiterakhir']);
     });
     Route::prefix('barang')->group(function () {
+        Route::get('/terakhir',[DashboardController::class,'barangterakhir']);
         Route::get('/', [BarangController::class, 'index']);
         Route::post('/', [BarangController::class, 'store']);
         Route::get('/{id}', [BarangController::class, 'show']);
         Route::put('/{id}', [BarangController::class, 'update']);
         Route::delete('/{id}', [BarangController::class, 'destroy']);
-        Route::get('/terakhir',[DashboardController::class,'barangterakhir']);
     });
     Route::prefix('pelanggan')->group(function () {
+        Route::get('/terakhir',[DashboardController::class,'pelangganterakhir']);
         Route::get('/', [PelangganController::class, 'index']);
         Route::post('/', [PelangganController::class, 'store']);
         Route::get('/{id}', [PelangganController::class, 'show']);
         Route::put('/{id}', [PelangganController::class, 'update']);
         Route::delete('/{id}', [PelangganController::class, 'destroy']);
-        Route::get('/terakhir',[DashboardController::class,'pelangganterakhir']);
     });
     Route::prefix('pemasok')->group(function () {
         Route::get('/', [PemasokController::class, 'index']);

@@ -92,9 +92,11 @@ class BarangMasukController extends Controller
      */
     public function destroy($id)
     {
-        $barangmasuk = BarangMasuk::find($id)->delete();
+        $barangmasuk = BarangMasuk::find($id);
+        $barangmasuk->delete();
         return response()->json([
             'message'=>'data berhasil dihapus',
+            'data yang dihapus'
         ]);
     }
 }
