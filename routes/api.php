@@ -30,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{id}', [TransaksiController::class, 'show']);
         Route::put('/{id}', [TransaksiController::class, 'update']);
         Route::delete('/{id}', [TransaksiController::class, 'destroy']);
+        Route::get('/terakhir',[DashboardController::class,'transaksiterakhir']);
     });
     Route::prefix('barang')->group(function () {
         Route::get('/', [BarangController::class, 'index']);
@@ -37,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{id}', [BarangController::class, 'show']);
         Route::put('/{id}', [BarangController::class, 'update']);
         Route::delete('/{id}', [BarangController::class, 'destroy']);
+        Route::get('/terakhir',[DashboardController::class,'barangterakhir']);
     });
     Route::prefix('pelanggan')->group(function () {
         Route::get('/', [PelangganController::class, 'index']);
@@ -44,6 +46,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{id}', [PelangganController::class, 'show']);
         Route::put('/{id}', [PelangganController::class, 'update']);
         Route::delete('/{id}', [PelangganController::class, 'destroy']);
+        Route::get('/terakhir',[DashboardController::class,'pelangganterakhir']);
     });
     Route::prefix('pemasok')->group(function () {
         Route::get('/', [PemasokController::class, 'index']);

@@ -71,9 +71,8 @@ class StokBarangController extends Controller
         $validasi = $request->validate([
             'barang_id' => 'required|exists:barangs,id',
             'tanggal' => 'required',
-            'jumlah_masuk' => 'required|exists:barang_masuks,id',
-            'kumlah_keluar' => 'required|exists:barang_keluar,id',
-            'stok_akhir' => 'required',
+            'jumlah_masuk' => 'required',
+            'jumlah_keluar' => 'required',
             'keterangan' => 'required',
         ]);
         $validasi['stok_akhir'] = $validasi['jumlah_masuk'] - $validasi['jumlah_keluar'];

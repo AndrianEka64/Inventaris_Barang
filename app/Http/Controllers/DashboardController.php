@@ -14,32 +14,59 @@ class DashboardController extends Controller
     {
         $totalbarang = Barang::count();
         return response()->json([
-            'message'=>'berhasil menampilkan total barang',
-            'Total_Barang'=>$totalbarang
+            'message' => 'berhasil menampilkan total barang',
+            'Total_Barang' => $totalbarang
         ]);
     }
     public function pemasok()
     {
         $totalpemasok = Pemasok::count();
         return response()->json([
-            'message'=>'berhasil menampilkan total pemasok',
-            'Total_pemasok'=>$totalpemasok
+            'message' => 'berhasil menampilkan total pemasok',
+            'Total_pemasok' => $totalpemasok
         ]);
     }
     public function pelanggan()
     {
         $totalpelanggan = Pelanggan::count();
         return response()->json([
-            'message'=>'berhasil menampilkan total pelanggan',
-            'Total_pelanggan'=>$totalpelanggan
+            'message' => 'berhasil menampilkan total pelanggan',
+            'Total_pelanggan' => $totalpelanggan
         ]);
     }
     public function transaksi()
     {
         $totaltransaksi = Transaksi::count();
         return response()->json([
-            'message'=>'berhasil menampilkan total transaksi',
-            'Total_transaksi'=>$totaltransaksi
+            'message' => 'berhasil menampilkan total transaksi',
+            'Total_transaksi' => $totaltransaksi
+        ]);
+    }
+
+    public function pelangganterakhir()
+    {
+        $terakhir = Pelanggan::orderBy('id', 'desc')->first();
+        return response()->json([
+            'message' => 'Data Pelanggan yang terakhir ditambahkan',
+            'data' => $terakhir
+        ]);
+    }
+
+    public function barangterakhir()
+    {
+        $terakhir = Barang::orderBy('id', 'desc')->first();
+        return response()->json([
+            'message' => 'Data Barang yang terakhir ditambahkan',
+            'data' => $terakhir
+        ]);
+    }
+
+    public function transaksiterakhir()
+    {
+        $terakhir = Transaksi::orderBy('id', 'desc')->first();
+        return response()->json([
+            'message' => 'Data Transaksi yang terakhir ditambahkan',
+            'data' => $terakhir
         ]);
     }
 }
