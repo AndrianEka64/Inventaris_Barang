@@ -25,7 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout']);
     //crud
     Route::prefix('transaksi')->group(function () {
-        Route::get('/terakhir',[DashboardController::class,'transaksiterakhir']);
+        Route::get('/terakhir', [DashboardController::class, 'transaksiterakhir']);
         Route::get('/', [TransaksiController::class, 'index']);
         Route::post('/', [TransaksiController::class, 'store']);
         Route::get('/{id}', [TransaksiController::class, 'show']);
@@ -33,7 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{id}', [TransaksiController::class, 'destroy']);
     });
     Route::prefix('barang')->group(function () {
-        Route::get('/terakhir',[DashboardController::class,'barangterakhir']);
+        Route::get('/terakhir', [DashboardController::class, 'barangterakhir']);
         Route::get('/', [BarangController::class, 'index']);
         Route::post('/', [BarangController::class, 'store']);
         Route::get('/{id}', [BarangController::class, 'show']);
@@ -41,7 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{id}', [BarangController::class, 'destroy']);
     });
     Route::prefix('pelanggan')->group(function () {
-        Route::get('/terakhir',[DashboardController::class,'pelangganterakhir']);
+        Route::get('/terakhir', [DashboardController::class, 'pelangganterakhir']);
         Route::get('/', [PelangganController::class, 'index']);
         Route::post('/', [PelangganController::class, 'store']);
         Route::get('/{id}', [PelangganController::class, 'show']);
@@ -49,6 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{id}', [PelangganController::class, 'destroy']);
     });
     Route::prefix('pemasok')->group(function () {
+        Route::get('/terakhir', [DashboardController::class, 'pemasokterakhir']);
         Route::get('/', [PemasokController::class, 'index']);
         Route::post('/', [PemasokController::class, 'store']);
         Route::get('/{id}', [PemasokController::class, 'show']);
@@ -70,6 +71,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{id}', [BarangKeluarController::class, 'destroy']);
     });
     Route::prefix('stokbarang')->group(function () {
+        Route::get('/menipis',[DashboardController::class,'menipis']);
         Route::get('/', [StokBarangController::class, 'index']);
         Route::post('/', [StokBarangController::class, 'store']);
         Route::get('/{id}', [StokBarangController::class, 'show']);
@@ -77,10 +79,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{id}', [StokBarangController::class, 'destroy']);
     });
     //total
-    Route::prefix('count')->group(function(){
-        Route::get('/barang',[DashboardController::class,'barang']);
-        Route::get('/pelanggan',[DashboardController::class,'pelanggan']);
-        Route::get('/pemasok',[DashboardController::class,'pemasok']);
-        Route::get('/transaksi',[DashboardController::class,'transaksi']);
+    Route::prefix('count')->group(function () {
+        Route::get('/barang', [DashboardController::class, 'barang']);
+        Route::get('/pelanggan', [DashboardController::class, 'pelanggan']);
+        Route::get('/pemasok', [DashboardController::class, 'pemasok']);
+        Route::get('/transaksi', [DashboardController::class, 'transaksi']);
+        Route::get('/barangmasuk', [DashboardController::class, 'barangmasuk']);
+        Route::get('/barangkeluar', [DashboardController::class, 'barangkeluar']);
     });
 });
