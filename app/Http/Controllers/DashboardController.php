@@ -15,7 +15,7 @@ class DashboardController extends Controller
 {
     public function barang()
     {
-        $totalbarang = Barang::count();
+        $totalbarang = Barang::sum('stok');
         return response()->json([
             'message' => 'berhasil menampilkan total barang',
             'Total_Barang' => $totalbarang
