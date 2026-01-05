@@ -52,4 +52,20 @@ class AuthController extends Controller
             'data' => $request->user(),
         ]);
     }
+
+    public function cekapi()
+    {
+        try {
+            return response()->json([
+                'status'=>'true',
+                'message'=>'API telah tersambung',
+                'server-time'=>now()
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status'=>'false',
+                'message'=>'API'
+            ]);
+        }
+    }
 }
