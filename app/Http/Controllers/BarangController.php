@@ -15,15 +15,8 @@ class BarangController extends Controller
      */
     public function index()
     {
-        try {
-            $barang = Barang::all();
-            return BarangResource::collection($barang);
-        } catch (\Exception $th) {
-            return response()->json([
-                'message' => 'Gagal menampilkan data barang',
-                'error' => $th->getMessage()
-            ]);
-        }
+        $barang = Barang::all();
+        return BarangResource::collection($barang);
     }
 
     /**
@@ -122,7 +115,7 @@ class BarangController extends Controller
                 ]);
             } else {
                 $barang->update([
-                    'pemasok_id'=>$data['pemasok_id'],
+                    'pemasok_id' => $data['pemasok_id'],
                     'nama_barang' => $data['nama_barang'],
                     'deskripsi' => $data['deskripsi'],
                     'harga' => $data['harga'],
@@ -148,7 +141,7 @@ class BarangController extends Controller
     {
         try {
             $barang = Barang::find($id);
-            Storage::delete('public/'.basename($barang->gambar_barang));
+            Storage::delete('public/' . basename($barang->gambar_barang));
             $barang->delete();
             return response()->json([
                 'message' => 'Data barang berhasil dihapus',

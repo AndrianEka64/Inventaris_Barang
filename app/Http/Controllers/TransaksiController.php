@@ -15,15 +15,8 @@ class TransaksiController extends Controller
      */
     public function index()
     {
-        try {
-            $transaksi = Transaksi::all();
-            return TransaksiResource::collection($transaksi);
-        } catch (\Exception $th) {
-            return response()->json([
-                'message' => 'Gagal menampilkan data transaksi',
-                'error' => $th->getMessage()
-            ]);
-        }
+        $transaksi = Transaksi::all();
+        return TransaksiResource::collection($transaksi);
     }
 
     /**
@@ -73,15 +66,8 @@ class TransaksiController extends Controller
      */
     public function show($id)
     {
-        try {
-            $transaksi = Transaksi::with('pelanggan:id,nama_pelanggan,alamat', 'barang:id,nama_barang')->find($id);
-            return new DetailTransaksiResource($transaksi);
-        } catch (\Exception $th) {
-            return response()->json([
-                'message' => 'Gagal menampilkan data transaksi',
-                'error' => $th->getMessage()
-            ]);
-        }
+        $transaksi = Transaksi::with('pelanggan:id,nama_pelanggan,alamat', 'barang:id,nama_barang')->find($id);
+        return new DetailTransaksiResource($transaksi);
     }
 
     /**
@@ -97,26 +83,33 @@ class TransaksiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = $request->validate([
-            'pelanggan_id' => 'required|exists:pelanggans,id',
-            'barang_id' => 'required|exists:barangs,id',
-            'qty' => 'required|integer|min:1',
-        ]);
-        $barang = Barang::findOrFail($data['barang_id']);
-        if ($data['qty'] > $barang->stok) {
+        try {
+            $data = $request->validate([
+                'pelanggan_id' => 'required|exists:pelanggans,id',
+                'barang_id' => 'required|exists:barangs,id',
+                'qty' => 'required|integer|min:1',
+            ]);
+            $barang = Barang::findOrFail($data['barang_id']);
+            if ($data['qty'] > $barang->stok) {
+                return response()->json([
+                    'message' => 'Stok barang tidak mencukupi',
+                    'banyak stok' => $barang->stok
+                ]);
+            }
+            $data['harga'] = $barang->harga;
+            $data['total'] = $data['qty'] * $data['harga'];
+            $transaksi = Transaksi::find($id);
+            $transaksi->update($data);
             return response()->json([
-                'message' => 'Stok barang tidak mencukupi',
-                'banyak stok' => $barang->stok
+                'message' => 'data transaksi berhasil diubah',
+                'data' => $transaksi
+            ]);
+        } catch (\Exception $th) {
+            return response()->json([
+                'message' => 'gagal mengubah data transaksi',
+                'error' => $th->getMessage()
             ]);
         }
-        $data['harga'] = $barang->harga;
-        $data['total'] = $data['qty'] * $data['harga'];
-        $transaksi = Transaksi::find($id);
-        $transaksi->update($data);
-        return response()->json([
-            'message'=>'data transaksi berhasil diubah',
-            'data'=> $transaksi
-        ]);
     }
 
     /**
@@ -124,11 +117,18 @@ class TransaksiController extends Controller
      */
     public function destroy($id)
     {
-        $transaksi = Transaksi::find($id);
-        $transaksi->delete();
-        return response()->json([
-            'message' => 'data transaksi berhasil dihapus',
-            'data yang dihapus' => $transaksi
-        ]);
+        try {
+            $transaksi = Transaksi::find($id);
+            $transaksi->delete();
+            return response()->json([
+                'message' => 'data transaksi berhasil dihapus',
+                'data yang dihapus' => $transaksi
+            ]);
+        } catch (\Exception $th) {
+            return response()->json([
+                'message' => 'gagal menghapus data transaksi',
+                'error' => $th->getMessage()
+            ]);
+        }
     }
 }

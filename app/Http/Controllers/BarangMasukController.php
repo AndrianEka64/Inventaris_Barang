@@ -32,20 +32,27 @@ class BarangMasukController extends Controller
      */
     public function store(Request $request)
     {
-        $validasi = $request->validate([
-            'pemasok_id' => 'required|exists:pemasoks,id',
-            'barang_id' => 'required|exists:barangs,id',
-            'qty' => 'required',
-            'tanggal_masuk' => 'required',
-        ]);
-        $barang = Barang::findOrFail($validasi['barang_id']);
-        $validasi['harga'] = $barang->harga;
-        $validasi['harga_beli'] = $validasi['qty'] * $validasi['harga'];
-        $barangmasuk = BarangMasuk::create($validasi);
-        return response()->json([
-            'message' => 'data barang masuk berhasil ditambah',
-            'data' => $barangmasuk
-        ]);
+        try {
+            $validasi = $request->validate([
+                'pemasok_id' => 'required|exists:pemasoks,id',
+                'barang_id' => 'required|exists:barangs,id',
+                'qty' => 'required',
+                'tanggal_masuk' => 'required',
+            ]);
+            $barang = Barang::findOrFail($validasi['barang_id']);
+            $validasi['harga'] = $barang->harga;
+            $validasi['harga_beli'] = $validasi['qty'] * $validasi['harga'];
+            $barangmasuk = BarangMasuk::create($validasi);
+            return response()->json([
+                'message' => 'data barang masuk berhasil ditambah',
+                'data' => $barangmasuk
+            ]);
+        } catch (\Exception $th) {
+            return response()->json([
+                'message' => 'gagal menambah data barang masuk',
+                'error' => $th->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -70,21 +77,28 @@ class BarangMasukController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validasi = $request->validate([
-            'pemasok_id' => 'required',
-            'barang_id' => 'required',
-            'qty' => 'required',
-            'tanggal_masuk' => 'required',
-        ]);
-        $barangmasuk = BarangMasuk::find($id);
-        $barang = Barang::findOrFail($validasi['barang_id']);
-        $validasi['harga'] = $barang->harga;
-        $validasi['harga_beli'] = $validasi['qty'] * $validasi['harga'];
-        $barangmasuk->update($validasi);
-        return response()->json([
-            'message'=>'data berhasil diubah',
-            'data'=>$barangmasuk
-        ]);
+        try {
+            $validasi = $request->validate([
+                'pemasok_id' => 'required',
+                'barang_id' => 'required',
+                'qty' => 'required',
+                'tanggal_masuk' => 'required',
+            ]);
+            $barangmasuk = BarangMasuk::find($id);
+            $barang = Barang::findOrFail($validasi['barang_id']);
+            $validasi['harga'] = $barang->harga;
+            $validasi['harga_beli'] = $validasi['qty'] * $validasi['harga'];
+            $barangmasuk->update($validasi);
+            return response()->json([
+                'message' => 'data berhasil diubah',
+                'data' => $barangmasuk
+            ]);
+        } catch (\Exception $th) {
+            return response()->json([
+                'message' => 'gagal mengubah data barang masuk',
+                'error' => $th->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -95,7 +109,7 @@ class BarangMasukController extends Controller
         $barangmasuk = BarangMasuk::find($id);
         $barangmasuk->delete();
         return response()->json([
-            'message'=>'data berhasil dihapus',
+            'message' => 'data berhasil dihapus',
             'data yang dihapus'
         ]);
     }

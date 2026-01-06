@@ -13,15 +13,8 @@ class PelangganController extends Controller
      */
     public function index()
     {
-        try {
-            $pelanggan = Pelanggan::all();
-            return PelangganResource::collection($pelanggan);
-        } catch (\Exception $th) {
-            return response()->json([
-                'message' => 'Gagal menampilkan data pelanggan',
-                'error' => $th->getMessage()
-            ]);
-        }
+        $pelanggan = Pelanggan::all();
+        return PelangganResource::collection($pelanggan);
     }
 
     /**
@@ -45,8 +38,8 @@ class PelangganController extends Controller
             ]);
             $pelanggan = Pelanggan::create($data);
             return response()->json([
-                'message'=>'data pelanggan berasil ditambahkan',
-                'data'=>$pelanggan
+                'message' => 'data pelanggan berasil ditambahkan',
+                'data' => $pelanggan
             ]);
         } catch (\Exception $th) {
             return response()->json([
@@ -61,18 +54,11 @@ class PelangganController extends Controller
      */
     public function show($id)
     {
-        try {
-            $pelanggan = Pelanggan::find($id);
-            return response()->json([
-                'message' => 'Data pelanggan berhasil ditampilkan',
-                'data' => $pelanggan
-            ]);
-        } catch (\Exception $th) {
-            return response()->json([
-                'message' => 'Gagal menampilkan data pelanggan',
-                'error' => $th->getMessage()
-            ]);
-        }
+        $pelanggan = Pelanggan::find($id);
+        return response()->json([
+            'message' => 'Data pelanggan berhasil ditampilkan',
+            'data' => $pelanggan
+        ]);
     }
 
     /**

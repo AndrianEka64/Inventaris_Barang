@@ -33,17 +33,10 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        try {
-            $request->user()->currentAccessToken()->delete();
-            return response()->json([
-                'message' => 'Berhasil logout',
-            ]);
-        } catch (\Exception $th) {
-            return response()->json([
-                'message' => 'Gagal logout',
-                'error' => $th->getMessage()
-            ]);
-        }
+        $request->user()->currentAccessToken()->delete();
+        return response()->json([
+            'message' => 'Berhasil logout',
+        ]);
     }
     public function lihat(Request $request)
     {
@@ -57,14 +50,14 @@ class AuthController extends Controller
     {
         try {
             return response()->json([
-                'status'=>'true',
-                'message'=>'API telah tersambung',
-                'server-time'=>now()
+                'status' => 'true',
+                'message' => 'API telah tersambung',
+                'server-time' => now()
             ]);
         } catch (\Throwable $th) {
             return response()->json([
-                'status'=>'false',
-                'message'=>'API'
+                'status' => 'false',
+                'message' => 'API'
             ]);
         }
     }

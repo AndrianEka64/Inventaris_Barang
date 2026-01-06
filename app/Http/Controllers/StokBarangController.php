@@ -31,19 +31,26 @@ class StokBarangController extends Controller
      */
     public function store(Request $request)
     {
-        $validasi = $request->validate([
-            'barang_id' => 'required|exists:barangs,id',
-            'tanggal' => 'required',
-            'jumlah_masuk' => 'required',
-            'jumlah_keluar' => 'required',
-            'keterangan' => 'required',
-        ]);
-        $validasi['stok_akhir'] = $validasi['jumlah_masuk'] - $validasi['jumlah_keluar'];
-        $stokbarang = StokBarang::create($validasi);
-        return response()->json([
-            'message' => 'data stok barang berhasil ditambah',
-            'data' => $stokbarang
-        ]);
+        try {
+            $validasi = $request->validate([
+                'barang_id' => 'required|exists:barangs,id',
+                'tanggal' => 'required',
+                'jumlah_masuk' => 'required',
+                'jumlah_keluar' => 'required',
+                'keterangan' => 'required',
+            ]);
+            $validasi['stok_akhir'] = $validasi['jumlah_masuk'] - $validasi['jumlah_keluar'];
+            $stokbarang = StokBarang::create($validasi);
+            return response()->json([
+                'message' => 'data stok barang berhasil ditambah',
+                'data' => $stokbarang
+            ]);
+        } catch (\Exception $th) {
+            return response()->json([
+                'message' => 'gagal menambah data stok barang',
+                'error' => $th->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -68,20 +75,27 @@ class StokBarangController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validasi = $request->validate([
-            'barang_id' => 'required|exists:barangs,id',
-            'tanggal' => 'required',
-            'jumlah_masuk' => 'required',
-            'jumlah_keluar' => 'required',
-            'keterangan' => 'required',
-        ]);
-        $validasi['stok_akhir'] = $validasi['jumlah_masuk'] - $validasi['jumlah_keluar'];
-        $stokbarang = StokBarang::find($id);
-        $stokbarang->update($validasi);
-        return response()->json([
-            'message'=>'data stok barang berhasil diubah',
-            'data'=>$stokbarang
-        ]);
+        try {
+            $validasi = $request->validate([
+                'barang_id' => 'required|exists:barangs,id',
+                'tanggal' => 'required',
+                'jumlah_masuk' => 'required',
+                'jumlah_keluar' => 'required',
+                'keterangan' => 'required',
+            ]);
+            $validasi['stok_akhir'] = $validasi['jumlah_masuk'] - $validasi['jumlah_keluar'];
+            $stokbarang = StokBarang::find($id);
+            $stokbarang->update($validasi);
+            return response()->json([
+                'message' => 'data stok barang berhasil diubah',
+                'data' => $stokbarang
+            ]);
+        } catch (\Exception $th) {
+            return response()->json([
+                'message' => 'gagal mengubah data stok barang',
+                'error' => $th->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -89,11 +103,18 @@ class StokBarangController extends Controller
      */
     public function destroy($id)
     {
-        $stokbarang = StokBarang::find($id);
-        $stokbarang->delete();
-        return response()->json([
-            'message' => 'data stok barang berhasil dihapus',
-            'data yang dihapus' => $stokbarang
-        ]);
+        try {
+            $stokbarang = StokBarang::find($id);
+            $stokbarang->delete();
+            return response()->json([
+                'message' => 'data stok barang berhasil dihapus',
+                'data yang dihapus' => $stokbarang
+            ]);
+        } catch (\Exception $th) {
+            return response()->json([
+                'message' => 'gagal menghapus data stok barang',
+                'error' => $th->getMessage()
+            ]);
+        }
     }
 }
