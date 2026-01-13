@@ -110,7 +110,7 @@ class BarangMasukController extends Controller
         $barangmasuk->delete();
         return response()->json([
             'message' => 'data berhasil dihapus',
-            'data yang dihapus'
+            'data yang dihapus'=> $barangmasuk
         ]);
     }
 }
